@@ -17,4 +17,9 @@ public class DatabaseService {
         String sql = "SELECT * FROM " + tableName;
         return jdbcTemplate.queryForList(sql);
     }
+
+    public int insertRows(String tableName, int id, String message) {
+        String sql = "INSERT INTO " + tableName + "(id, message) VALUES (" + id + ", \'" + message + "\' )";
+        return jdbcTemplate.update(sql);
+    }
 }

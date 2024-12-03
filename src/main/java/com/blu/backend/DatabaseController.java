@@ -18,4 +18,10 @@ public class DatabaseController {
     public List<Map<String, Object>> getData(@RequestParam String tableName) {
         return databaseService.getAllRows(tableName);
     }
+
+    @GetMapping("/insert")
+    public int addData(@RequestParam String tableName, @RequestParam int id, @RequestParam String message) {
+        return databaseService.insertRows(tableName, id, message);
+    }
+
 }
