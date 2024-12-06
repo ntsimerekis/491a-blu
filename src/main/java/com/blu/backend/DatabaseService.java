@@ -19,7 +19,7 @@ public class DatabaseService {
     }
 
     public int insertRows(String tableName, int id, String message) {
-        String sql = "INSERT INTO " + tableName + "(id, message) VALUES (" + id + ", \'" + message + "\' )";
+        String sql = "INSERT INTO " + tableName + "(id, word) VALUES (" + id + ", \'" + message + "\' )";
         return jdbcTemplate.update(sql);
     }
 }
