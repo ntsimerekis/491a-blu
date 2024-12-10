@@ -15,7 +15,7 @@ public class PathService {
     @Autowired
     private PathRepository pathRepository;
 
-    public List<Path> getAllUsers() {
+    public List<Path> getAllPaths() {
         return pathRepository.findAll();
     }
 
