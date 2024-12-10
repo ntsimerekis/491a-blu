@@ -1,8 +1,6 @@
 package com.blu.service;
 import com.blu.model.Path;
-import com.blu.model.User;
 import com.blu.repository.PathRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +29,7 @@ public class PathService {
         pathRepository.deleteById(id);
     }
 
-    public Path updatePath(Long id, User pathDetails) {
+    public Path updatePath(Long id, Path pathDetails) {
         Path path = pathRepository.findById(id).orElseThrow();
         // Insert data from the controller
         return pathRepository.save(path);
