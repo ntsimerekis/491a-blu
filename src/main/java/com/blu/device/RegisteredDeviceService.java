@@ -28,8 +28,8 @@ public class RegisteredDeviceService {
     }
 
     public RegisteredDevice updateRegisteredDevice(Long id, RegisteredDevice registeredDeviceDetails) {
-        RegisteredDevice path = registeredDeviceRepository.findById(id).orElseThrow();
+        RegisteredDevice registeredDevice = registeredDeviceRepository.findById(id).orElseThrow();
         // Insert data from the controller
-        return registeredDeviceRepository.save(path);
+        return registeredDeviceRepository.save(registeredDeviceDetails);
     }
 }
