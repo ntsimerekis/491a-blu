@@ -1,6 +1,7 @@
 package com.blu.auth;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,6 +14,7 @@ import java.util.List;
 @Table(name = "users")
 @Entity
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
@@ -34,6 +36,10 @@ public class User implements UserDetails {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private boolean admin;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -92,5 +98,11 @@ public class User implements UserDetails {
         return this;
     }
 
-    // Getters and setters
+    public User(){}
+
+    public User(String email, String password, boolean admin) {
+        this.email = email;
+        this.password = password;
+        this.admin = admin;
+    }
 }

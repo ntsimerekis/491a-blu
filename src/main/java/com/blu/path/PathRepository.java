@@ -1,7 +1,6 @@
-package com.blu.repository;
+package com.blu.path;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.blu.model.Path;
 import org.springframework.stereotype.Repository;
 
 @Repository

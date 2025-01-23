@@ -1,10 +1,10 @@
-package com.blu.model;
+package com.blu.path;
 
 
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import com.blu.model.User;
+import com.blu.auth.User;
 
 @Embeddable
 public class PathKey implements Serializable {
@@ -12,7 +12,7 @@ public class PathKey implements Serializable {
 Used to create a composite key for Path.
  */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="username",referencedColumnName = "username")
+    @JoinColumn(name="email",referencedColumnName = "email")
     private User user;
 
     @Column(name="name",

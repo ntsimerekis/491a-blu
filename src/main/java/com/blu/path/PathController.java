@@ -1,7 +1,5 @@
-package com.blu.controller;
+package com.blu.path;
 
-import com.blu.model.Path;
-import com.blu.service.PathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

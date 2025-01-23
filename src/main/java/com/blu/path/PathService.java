@@ -1,6 +1,4 @@
-package com.blu.service;
-import com.blu.model.Path;
-import com.blu.repository.PathRepository;
+package com.blu.path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

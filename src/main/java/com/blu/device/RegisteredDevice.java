@@ -1,5 +1,6 @@
-package com.blu.model;
+package com.blu.device;
 
+import com.blu.path.Path;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

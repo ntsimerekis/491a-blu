@@ -1,6 +1,4 @@
-package com.blu.controller;
-import com.blu.model.RegisteredDevice;
-import com.blu.service.RegisteredDeviceService;
+package com.blu.device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

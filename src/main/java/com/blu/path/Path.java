@@ -1,5 +1,7 @@
-package com.blu.model;
+package com.blu.path;
 
+import com.blu.device.RegisteredDevice;
+import com.blu.auth.User;
 import jakarta.persistence.*;
 
 @Entity
@@ -50,7 +52,7 @@ public class Path {
 
     public Path(){}
 
-   public Path(String name, String file, int deviceMac, User user,RegisteredDevice registeredDevice) {
+   public Path(String name, String file, int deviceMac, User user, RegisteredDevice registeredDevice) {
 
         this.file = file;
         this.registeredDevice = registeredDevice;

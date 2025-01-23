@@ -1,6 +1,4 @@
-package com.blu.service;
-import com.blu.model.RegisteredDevice;
-import com.blu.repository.RegisteredDeviceRepository;
+package com.blu.device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
