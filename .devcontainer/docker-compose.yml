@@ -6,7 +6,9 @@ services:
       - ../..:/workspaces:cached
     network_mode: service:db
     command: sleep infinity
-    depends_on: mariadb
+    depends_on:
+      mariadb:
+        condition: service_started
 
   mariadb:
     image: "mariadb"
