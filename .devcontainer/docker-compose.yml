@@ -4,7 +4,6 @@ services:
     volumes:
       - ../..:/workspaces:cached
     network_mode: service:mariadb
-    command: sleep infinity
     depends_on:
       - mariadb
 
