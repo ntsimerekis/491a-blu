@@ -7,8 +7,7 @@ services:
     network_mode: service:db
     command: sleep infinity
     depends_on:
-      mariadb:
-        condition: service_started
+      - mariadb
 
   mariadb:
     image: "mariadb"
