@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  devcontainer:
+    image: mcr.microsoft.com/devcontainers/base:bookworm
+    volumes:
+      - ../..:/workspaces:cached
+    network_mode: service:db
+    command: sleep infinity
+    depends_on: mariadb
+
+  mariadb:
+    image: "mariadb"
+    restart: 'always'
+    environment:
+      MYSQL_ROOT_PASSWORD: "springboot"
+      MYSQL_DATABASE: "blu"
+      MYSQL_USER: "spring"
+      MYSQL_PASSWORD: "springboot"
