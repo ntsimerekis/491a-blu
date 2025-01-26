@@ -4,8 +4,6 @@ services:
     volumes:
       - ../..:/workspaces:cached
     network_mode: service:mariadb
-    depends_on:
-      - mariadb
 
   mariadb:
     image: "mariadb"
