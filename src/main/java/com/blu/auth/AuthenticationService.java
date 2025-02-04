@@ -1,5 +1,8 @@
 package com.blu.auth;
 
+import com.blu.auth.Dto.LoginUserDto;
+import com.blu.auth.Dto.RegisterUserDto;
+import com.blu.auth.exception.EmailAlreadyExistsException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +27,9 @@ public class AuthenticationService {
     }
 
     public User signup(RegisterUserDto input) {
+        if (userRepository.findByEmail(input.getEmail()).isPresent()) {
+            throw new EmailAlreadyExistsException("Email is already in use.");
+        }
         User user = new User()
                 .setFullName(input.getFullName())
                 .setEmail(input.getEmail())
