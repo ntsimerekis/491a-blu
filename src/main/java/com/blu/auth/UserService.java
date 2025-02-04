@@ -30,16 +30,19 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    // Unused code. We're going to be deleting by email now
     public void deleteUser(Integer id) {
         userRepository.deleteById(id);
     }
 
+    // Deletes user based on email
     public void deleteUser(String email) {
         userRepository.deleteByEmail(email);
     }
 
-    public User updateUser(Integer id, User userDetails) {
-        User user = userRepository.findById(id).orElseThrow();
+    // Updates user data
+    public User updateUser(String email, User userDetails) {
+        User user = userRepository.findByEmail(email).orElseThrow();
         // Insert data from the controller
         return userRepository.save(user);
     }
