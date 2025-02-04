@@ -34,6 +34,10 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public void deleteUser(String email) {
+        userRepository.deleteByEmail(email);
+    }
+
     public User updateUser(Integer id, User userDetails) {
         User user = userRepository.findById(id).orElseThrow();
         // Insert data from the controller

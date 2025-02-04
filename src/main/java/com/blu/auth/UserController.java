@@ -42,6 +42,12 @@ public class UserController {
         return userService.updateUser(id, userDetails);
     }
 
+    @PostMapping("/deleteProfile")
+    public ResponseEntity<Boolean> delete(@RequestBody ProfileUserDto ProfileUserDto){
+        userService.deleteUser(ProfileUserDto.getEmail());
+        return ResponseEntity.ok(true);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
