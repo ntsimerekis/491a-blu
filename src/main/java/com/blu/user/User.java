@@ -1,4 +1,4 @@
-package com.blu.auth;
+package com.blu.user;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -41,6 +41,10 @@ public class User implements UserDetails {
     @ColumnDefault("false")
     private boolean admin;
 
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private boolean emailVerified;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
@@ -51,8 +55,8 @@ public class User implements UserDetails {
         return this;
     }
 
-    public void getEmail(String fullName) {
-        this.fullName = fullName;
+    public String getEmail() {
+        return this.email;
     }
 
     public String getPassword() {
@@ -76,16 +80,11 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return this.emailVerified;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
         return true;
     }
 
@@ -97,6 +96,17 @@ public class User implements UserDetails {
         this.fullName = fullName;
         return this;
     }
+
+    public User verifyUser(){
+        this.emailVerified = true;
+        return this;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public User setEmailVerified(boolean emailVerified) {this.emailVerified = emailVerified;return this;}
 
     public User(){}
 

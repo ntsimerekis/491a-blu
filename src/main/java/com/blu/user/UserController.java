@@ -1,4 +1,4 @@
-package com.blu.auth;
+package com.blu.user;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

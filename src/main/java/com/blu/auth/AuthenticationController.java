@@ -1,11 +1,11 @@
 package com.blu.auth;
 
+import com.blu.user.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
-@RestController
 @RequestMapping("/auth")
+@RestController
 public class AuthenticationController {
     private final JwtService jwtService;
 
@@ -21,6 +21,11 @@ public class AuthenticationController {
         User registeredUser = authenticationService.signup(registerUserDto);
 
         return ResponseEntity.ok(registeredUser);
+    }
+
+    @PostMapping("/confirm/{confirmationToken}")
+    public ResponseEntity<Boolean> confirm(@PathVariable String confirmationToken) {
+        return ResponseEntity.ok(authenticationService.confirm(confirmationToken));
     }
 
     @PostMapping("/login")

@@ -1,5 +1,6 @@
-package com.blu.auth;
+package com.blu.user;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,4 +40,6 @@ public class UserService {
         // Insert data from the controller
         return userRepository.save(user);
     }
+
+    public User getUserByEmail(String email) {return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));}
 }

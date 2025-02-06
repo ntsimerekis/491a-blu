@@ -4,7 +4,7 @@ package com.blu.path;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import com.blu.auth.User;
+import com.blu.user.User;
 
 @Embeddable
 public class PathKey implements Serializable {
