@@ -59,8 +59,8 @@ public class AuthenticationService {
                 "ntsimerekis@gmail.com",
                 user.getEmail(),
                 "Your Blu Verification Code",
-                "<a href=\"http://localhost:8080/auth/confirm/" + token.getConfirmationToken() +"\"> Email verification link! </a>"
-                );
+                "<a href=\"http://localhost:8080/auth/confirm/" + token.getConfirmationToken() + "\"> Email verification link! </a>"
+        );
 
         confirmationTokenRepository.save(token);
 
@@ -101,17 +101,37 @@ public class AuthenticationService {
 
     public boolean forgotPassword(String email) {
 
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(email));
+
+        ConfirmationToken token = new ConfirmationToken(user);
+        confirmationTokenRepository.save(token);
+
         return emailService.send(
-                "blu",
+                "ntsimerekis@yahoo.com",
 
                 email,
 
-        "Blu Password Reset",
+                "Blu Password Reset",
 
                 """
-                Hello, let's reset your password!
-                Click on this link to reset your password.
-                https://localhost:8080/new
-                """);
+                        Hello, let's reset your password!
+                        Click on this link to reset your password.
+                        https://localhost:8080/confirmForgotPassword/
+                        """ + token.getConfirmationToken()
+        );
+    }
+
+    public boolean confirmForgotPassword(RegisterUserDto userDto, String confirmationToken) {
+
+        if (confirmationTokenRepository.existsByConfirmationToken(confirmationToken)) {
+            User confirmedUser = confirmationTokenRepository.findByConfirmationToken(confirmationToken)
+                    .get()
+                    .getUser();
+            confirmedUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            userRepository.save(confirmedUser);
+            return true;
+        }
+        return false;
     }
 }

@@ -23,6 +23,17 @@ public class AuthenticationController {
         return ResponseEntity.ok(registeredUser);
     }
 
+    @GetMapping("/forgot/{email}")
+    public ResponseEntity<Boolean> forgotPassword(@PathVariable String email) {
+        return ResponseEntity.ok(authenticationService.forgotPassword(email));
+    }
+
+    @PostMapping("/confirmForgotPassword/{email}")
+    public ResponseEntity<Boolean> confirmForgotPassword(@PathVariable String email, @RequestBody RegisterUserDto registerUserDto) {
+        return ResponseEntity.ok(authenticationService.confirmForgotPassword(registerUserDto,email));
+    }
+
+
     @GetMapping("/confirm/{confirmationToken}")
     public ResponseEntity<Boolean> confirm(@PathVariable String confirmationToken) {
         return ResponseEntity.ok(authenticationService.confirm(confirmationToken));
