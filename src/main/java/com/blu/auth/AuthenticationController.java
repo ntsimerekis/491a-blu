@@ -23,7 +23,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(registeredUser);
     }
 
-    @PostMapping("/confirm/{confirmationToken}")
+    @GetMapping("/confirm/{confirmationToken}")
     public ResponseEntity<Boolean> confirm(@PathVariable String confirmationToken) {
         return ResponseEntity.ok(authenticationService.confirm(confirmationToken));
     }

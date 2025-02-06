@@ -56,10 +56,10 @@ public class AuthenticationService {
         logger.info("Token: " + token.getConfirmationToken());
 
         emailService.send(
-                "no-reply@tsimerekis.com",
+                "ntsimerekis@gmail.com",
                 user.getEmail(),
                 "Your Blu Verification Code",
-                "<a href=\"http://localhost:8080/auth/confirm/" + token.getConfirmationToken() +"\"> Email verification link! <\\a>"
+                "<a href=\"http://localhost:8080/auth/confirm/" + token.getConfirmationToken() +"\"> Email verification link! </a>"
                 );
 
         confirmationTokenRepository.save(token);
