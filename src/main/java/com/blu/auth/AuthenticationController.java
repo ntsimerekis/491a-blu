@@ -1,11 +1,14 @@
 package com.blu.auth;
 
+import com.blu.auth.Dto.LoginUserDto;
+import com.blu.auth.Dto.RegisterUserDto;
 import com.blu.user.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/auth")
+@CrossOrigin
 @RestController
+@RequestMapping("/auth")
 public class AuthenticationController {
     private final JwtService jwtService;
 
@@ -18,6 +21,7 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
+
         User registeredUser = authenticationService.signup(registerUserDto);
 
         return ResponseEntity.ok(registeredUser);
@@ -29,7 +33,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/confirmForgotPassword/{email}")
-    public ResponseEntity<Boolean> confirmForgotPassword(@PathVariable String email, @RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<Boolean> confirmForgotPassword(@PathVariable String email, @RequestBody com.blu.auth.RegisterUserDto registerUserDto) {
         return ResponseEntity.ok(authenticationService.confirmForgotPassword(registerUserDto,email));
     }
 

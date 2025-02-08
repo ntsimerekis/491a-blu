@@ -44,6 +44,10 @@ public class AuthenticationService {
     }
 
     public User signup(RegisterUserDto input) {
+        if (userRepository.findByEmail(input.getEmail()).isPresent()) {
+            throw new EmailAlreadyExistsException("Email is already in use.");
+        }
+
         User user = new User()
                 .setFullName(input.getFullName())
                 .setEmail(input.getEmail())

@@ -1,4 +1,4 @@
-package com.blu.auth;
+package com.blu.auth.Dto;
 
 public class RegisterUserDto {
     private String email;
