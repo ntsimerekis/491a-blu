@@ -33,7 +33,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/confirmForgotPassword/{email}")
-    public ResponseEntity<Boolean> confirmForgotPassword(@PathVariable String email, @RequestBody com.blu.auth.RegisterUserDto registerUserDto) {
+    public ResponseEntity<Boolean> confirmForgotPassword(@PathVariable String email, @RequestBody RegisterUserDto registerUserDto) {
         return ResponseEntity.ok(authenticationService.confirmForgotPassword(registerUserDto,email));
     }
 

@@ -1,5 +1,8 @@
 package com.blu.auth;
 
+import com.blu.auth.Dto.LoginUserDto;
+import com.blu.auth.Dto.RegisterUserDto;
+import com.blu.auth.exception.EmailAlreadyExistsException;
 import com.blu.user.User;
 import com.blu.user.UserRepository;
 
@@ -60,7 +63,7 @@ public class AuthenticationService {
         logger.info("Token: " + token.getConfirmationToken());
 
         emailService.send(
-                "ntsimerekis@gmail.com",
+                "",
                 user.getEmail(),
                 "Your Blu Verification Code",
                 "<a href=\"http://localhost:8080/auth/confirm/" + token.getConfirmationToken() + "\"> Email verification link! </a>"
@@ -112,7 +115,7 @@ public class AuthenticationService {
         confirmationTokenRepository.save(token);
 
         return emailService.send(
-                "ntsimerekis@yahoo.com",
+                "",
 
                 email,
 
