@@ -1,7 +1,7 @@
 package com.blu.path;
 
 import com.blu.device.RegisteredDevice;
-import com.blu.auth.User;
+import com.blu.user.User;
 import jakarta.persistence.*;
 
 @Entity

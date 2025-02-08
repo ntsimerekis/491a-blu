@@ -1,5 +1,6 @@
-package com.blu.auth;
+package com.blu.user;
 
+import com.blu.auth.Dto.ProfileUserDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,13 +38,19 @@ public class UserController {
         return userService.saveUser(user);
     }
 
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable Integer id, @RequestBody User userDetails) {
-        return userService.updateUser(id, userDetails);
+    @PutMapping("/{email}")
+    public User updateUser(@PathVariable String email, @RequestBody User userDetails) {
+        return userService.updateUser(email, userDetails);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Integer id) {
-        userService.deleteUser(id);
+    @PostMapping("/deleteProfile")
+    public ResponseEntity<Boolean> delete(@RequestBody ProfileUserDto ProfileUserDto){
+        userService.deleteUser(ProfileUserDto.getEmail());
+        return ResponseEntity.ok(true);
+    }
+
+    @DeleteMapping("/{email}")
+    public void deleteUser(@PathVariable String email) {
+        userService.deleteUser(email);
     }
 }

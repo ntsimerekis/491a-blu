@@ -1,5 +1,6 @@
-package com.blu.auth;
+package com.blu.user;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,13 +31,22 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    // Unused code. We're going to be deleting by email now
     public void deleteUser(Integer id) {
         userRepository.deleteById(id);
     }
 
-    public User updateUser(Integer id, User userDetails) {
-        User user = userRepository.findById(id).orElseThrow();
+    // Deletes user based on email
+    public void deleteUser(String email) {
+        userRepository.deleteByEmail(email);
+    }
+
+    // Updates user data
+    public User updateUser(String email, User userDetails) {
+        User user = userRepository.findByEmail(email).orElseThrow();
         // Insert data from the controller
         return userRepository.save(user);
     }
+
+    public User getUserByEmail(String email) {return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));}
 }

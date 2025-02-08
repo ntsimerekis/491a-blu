@@ -1,13 +1,14 @@
 package com.blu.auth;
 
+import com.blu.auth.Dto.LoginUserDto;
+import com.blu.auth.Dto.RegisterUserDto;
+import com.blu.user.User;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/auth")
+@CrossOrigin
 @RestController
+@RequestMapping("/auth")
 public class AuthenticationController {
     private final JwtService jwtService;
 
@@ -20,9 +21,26 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
+
         User registeredUser = authenticationService.signup(registerUserDto);
 
         return ResponseEntity.ok(registeredUser);
+    }
+
+    @GetMapping("/forgot/{email}")
+    public ResponseEntity<Boolean> forgotPassword(@PathVariable String email) {
+        return ResponseEntity.ok(authenticationService.forgotPassword(email));
+    }
+
+    @PostMapping("/confirmForgotPassword/{email}")
+    public ResponseEntity<Boolean> confirmForgotPassword(@PathVariable String email, @RequestBody RegisterUserDto registerUserDto) {
+        return ResponseEntity.ok(authenticationService.confirmForgotPassword(registerUserDto,email));
+    }
+
+
+    @GetMapping("/confirm/{confirmationToken}")
+    public ResponseEntity<Boolean> confirm(@PathVariable String confirmationToken) {
+        return ResponseEntity.ok(authenticationService.confirm(confirmationToken));
     }
 
     @PostMapping("/login")
