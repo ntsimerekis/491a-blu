@@ -34,8 +34,12 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<User>> allUsers() {
         List <User> users = userService.allUsers();
-
         return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/fetch")
+    public User fetchUser(@RequestBody ProfileUserDto profileUserDto) {
+        return userService.getUserByEmail(profileUserDto.getEmail());
     }
 
     @PostMapping
