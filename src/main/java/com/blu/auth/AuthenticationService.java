@@ -9,6 +9,7 @@ import com.blu.user.UserRepository;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,6 +32,9 @@ public class AuthenticationService {
     private final EmailService emailService;
 
     private final AuthenticationManager authenticationManager;
+
+    @Value("${blu.auth.email-verification}")
+    private boolean requireEmailVerification;
 
     public AuthenticationService(
             ConfirmationTokenRespository confirmationTokenRepository,
@@ -59,31 +63,35 @@ public class AuthenticationService {
         //user object when saved changes
         user = userRepository.save(user);
 
-        ConfirmationToken token = new ConfirmationToken(user);
-        logger.info("Token: " + token.getConfirmationToken());
+        if (requireEmailVerification) {
+            ConfirmationToken token = new ConfirmationToken(user);
+            logger.info("Token: " + token.getConfirmationToken());
 
-        emailService.send(
-                "",
-                user.getEmail(),
-                "Your Blu Verification Code",
-                "<a href=\"http://localhost:8080/auth/confirm/" + token.getConfirmationToken() + "\"> Email verification link! </a>"
-        );
+            emailService.send(
+                    "",
+                    user.getEmail(),
+                    "Your Blu Verification Code",
+                    "<a href=\"http://localhost:8080/auth/confirm/" + token.getConfirmationToken() + "\"> Email verification link! </a>"
+            );
 
-        confirmationTokenRepository.save(token);
-
+            confirmationTokenRepository.save(token);
+        }
         return user;
     }
 
     public boolean confirm(String confirmationToken) {
-        if (confirmationTokenRepository.existsByConfirmationToken(confirmationToken)) {
-            User confirmedUser = confirmationTokenRepository.findByConfirmationToken(confirmationToken)
-                    .get()
-                    .getUser();
-            confirmedUser.setEmailVerified(true);
-            userRepository.save(confirmedUser);
-            return true;
+        if (requireEmailVerification) {
+            if (confirmationTokenRepository.existsByConfirmationToken(confirmationToken)) {
+                User confirmedUser = confirmationTokenRepository.findByConfirmationToken(confirmationToken)
+                        .get()
+                        .getUser();
+                confirmedUser.setEmailVerified(true);
+                userRepository.save(confirmedUser);
+                return true;
+            }
+            return false;
         }
-        return false;
+        return true;
     }
 
     public User authenticate(LoginUserDto input) {
@@ -91,7 +99,7 @@ public class AuthenticationService {
         User user = userRepository.findByEmail(input.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException(input.getEmail()));
 
-        if (user.isEmailVerified()) {
+        if (requireEmailVerification && user.isEmailVerified()) {
 
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
