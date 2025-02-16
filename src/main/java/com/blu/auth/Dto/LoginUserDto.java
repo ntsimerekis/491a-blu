@@ -1,5 +1,8 @@
 package com.blu.auth.Dto;
 
+/*
+    Stores a login json
+ */
 public class LoginUserDto {
     private String email;
 

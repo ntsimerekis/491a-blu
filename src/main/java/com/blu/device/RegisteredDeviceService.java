@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/*
+    Basic Device CRUD operations
+ */
 @Service
 public class RegisteredDeviceService {
 

@@ -6,12 +6,12 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import com.blu.user.User;
 
+/*
+    Used to create a composite key for Path.
+ */
 @Embeddable
 public class PathKey implements Serializable {
-/*
-Used to create a composite key for Path.
- */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="email",referencedColumnName = "email")
     private User user;
 

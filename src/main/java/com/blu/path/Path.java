@@ -18,7 +18,7 @@ public class Path {
     private String file;
 
     //foreign key
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="mac_address", referencedColumnName = "mac_address")
     private RegisteredDevice registeredDevice;
 

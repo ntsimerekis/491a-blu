@@ -28,6 +28,9 @@ public class SecurityConfiguration {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
+    /*
+        Allows auth endpoints to be hit without needing a JWT token
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf()
@@ -47,6 +50,9 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+    /*
+        Addition cors config. Probably redundant
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

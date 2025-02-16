@@ -1,5 +1,8 @@
 package com.blu.auth.Dto;
 
+/*
+    Simple DTO for getting a register user JSON
+ */
 public class RegisterUserDto {
     private String email;
 
