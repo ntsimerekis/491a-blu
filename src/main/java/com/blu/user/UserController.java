@@ -1,13 +1,18 @@
 package com.blu.user;
 
 import com.blu.auth.Dto.ProfileUserDto;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/*
+    User CRUD endpoints. Wraps around the services
+ */
 @RequestMapping("/users")
 @RestController
 public class UserController {
@@ -26,7 +31,7 @@ public class UserController {
         return ResponseEntity.ok(currentUser);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<User>> allUsers() {
         List <User> users = userService.allUsers();
 
@@ -43,14 +48,13 @@ public class UserController {
         return userService.updateUser(email, userDetails);
     }
 
-    @PostMapping("/deleteProfile")
-    public ResponseEntity<Boolean> delete(@RequestBody ProfileUserDto ProfileUserDto){
-        userService.deleteUser(ProfileUserDto.getEmail());
-        return ResponseEntity.ok(true);
-    }
-
     @DeleteMapping("/{email}")
-    public void deleteUser(@PathVariable String email) {
-        userService.deleteUser(email);
+    public ResponseEntity<Boolean> deleteUser(@PathVariable String email) {
+        if(userService.deleteUser(email) != 0) {
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity
+                .status(418)
+                .body(false);
     }
 }

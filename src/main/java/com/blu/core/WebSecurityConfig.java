@@ -16,13 +16,16 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // ...
+        // Defines the security filter chain to accept CORS requests
         http.cors(Customizer.withDefaults()); // disable this line to reproduce the CORS 401
         return http.build();
     }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
+        /*
+            Allow all connections via CORS
+         */
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("*"));

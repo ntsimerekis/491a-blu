@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/*
+    Business logic for the user endpoints. Wrapper arounf the UserRepository
+ */
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -16,11 +19,7 @@ public class UserService {
     }
 
     public List<User> allUsers() {
-        List<User> users = new ArrayList<>();
-
-        userRepository.findAll().forEach(users::add);
-
-        return users;
+        return userRepository.findAll();
     }
 
     public Optional<User> getUserById(Integer id) {
@@ -37,8 +36,8 @@ public class UserService {
     }
 
     // Deletes user based on email
-    public void deleteUser(String email) {
-        userRepository.deleteByEmail(email);
+    public int deleteUser(String email) {
+        return userRepository.deleteByEmail(email);
     }
 
     // Updates user data
