@@ -188,7 +188,8 @@ public class AuthenticationService {
         String emailHTML = vericationToken;
         try {
             String marker = "<!--INSERT VERIFICATION LINK BELOW-->";
-            String linkHtml = "<a class=\"btn\" href=\"" + "http://localhost:8080/confirm/" +vericationToken + "\">Click here to verify your email</a>";
+            String linkHtml = "<a class=\"btn\" href=\"" + "http://localhost:5173/#/verificationconfirmed?token="
+                    + vericationToken + "\">Click here to verify your email</a>";
             emailHTML = StreamUtils.copyToString(verifiedEmailTemplate.getInputStream(), StandardCharsets.UTF_8)
                     .replace(marker, marker + "\n" + linkHtml);
         }
