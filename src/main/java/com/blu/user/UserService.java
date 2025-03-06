@@ -35,11 +35,13 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    // Luke T.
     // Deletes user based on email
     public int deleteUser(String email) {
         return userRepository.deleteByEmail(email);
     }
 
+    // Luke T.
     // Updates user data
     public User updateUser(String email, User userDetails) {
         User user = userRepository.findByEmail(email).orElseThrow();
@@ -47,5 +49,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User getUserByEmail(String email) {return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));}
+    // Luke T.
+    // Gets user by email
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));}
 }
