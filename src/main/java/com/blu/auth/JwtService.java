@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+/*
+    Service that creates JWT Tokens
+ */
 @Service
 public class JwtService {
     @Value("${security.jwt.secret-key}")

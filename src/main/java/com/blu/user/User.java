@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,12 +12,18 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+/*
+    Defines a user object/entity that extends the spring boot UserDetails class.
+ */
 @Table(name = "users")
 @Entity
 public class User implements UserDetails {
 
+    @Value("${blu.auth.email-verification}")
+    private static boolean requireEmailVerification;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;
 
@@ -74,17 +81,10 @@ public class User implements UserDetails {
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
     public boolean isAccountNonLocked() {
-        return this.emailVerified;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
+        if (requireEmailVerification) {
+            return this.emailVerified;
+        }
         return true;
     }
 
@@ -106,7 +106,7 @@ public class User implements UserDetails {
         return emailVerified;
     }
 
-    public User setEmailVerified(boolean emailVerified) {this.emailVerified = emailVerified;return this;}
+    public void setEmailVerified(boolean emailVerified) {this.emailVerified = emailVerified;}
 
     public User(){}
 

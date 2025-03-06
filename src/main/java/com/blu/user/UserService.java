@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/*
+    Business logic for the user endpoints. Wrapper arounf the UserRepository
+ */
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -16,11 +19,7 @@ public class UserService {
     }
 
     public List<User> allUsers() {
-        List<User> users = new ArrayList<>();
-
-        userRepository.findAll().forEach(users::add);
-
-        return users;
+        return userRepository.findAll();
     }
 
 //    public Optional<User> getUserByEmail(String email) {
@@ -36,11 +35,13 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    // Luke T.
     // Deletes user based on email
-    public void deleteUser(String email) {
-        userRepository.deleteByEmail(email);
+    public int deleteUser(String email) {
+        return userRepository.deleteByEmail(email);
     }
 
+    // Luke T.
     // Updates user data
     public User updateUser(String email, User userDetails) {
         User user = userRepository.findByEmail(email).orElseThrow();
@@ -48,5 +49,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User getUserByEmail(String email) {return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));}
+    // Luke T.
+    // Gets user by email
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));}
 }

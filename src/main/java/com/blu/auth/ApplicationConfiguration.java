@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
+/*
+    Provides methods to help with password encoding and authentication
+ */
 public class ApplicationConfiguration {
     private final UserRepository userRepository;
 

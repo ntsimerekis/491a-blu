@@ -2,6 +2,8 @@ package com.blu.auth;
 
 import com.blu.user.User;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -16,11 +18,12 @@ public class ConfirmationToken {
     @Column(name = "token_id")
     private Long tokenId;
 
-    @Column(name = "confirmation_token")
+    @Column(name = "confirmation_tokens")
     private String confirmationToken;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER ,cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     public ConfirmationToken() {

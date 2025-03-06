@@ -3,13 +3,18 @@ package com.blu.auth;
 import com.blu.auth.Dto.LoginUserDto;
 import com.blu.auth.Dto.RegisterUserDto;
 import com.blu.user.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/auth")
+/*
+    Handles all authentication endpoints. Wraps around service calls
+ */
 public class AuthenticationController {
+
     private final JwtService jwtService;
 
     private final AuthenticationService authenticationService;
@@ -47,6 +52,9 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
 
+        /*
+            Generate the web token
+         */
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
         LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
