@@ -35,4 +35,9 @@ public class RegisteredDeviceService {
         // Insert data from the controller
         return registeredDeviceRepository.save(registeredDeviceDetails);
     }
+
+    public RegisteredDevice getRegisteredDeviceByIp(String ipAddress) {
+        return registeredDeviceRepository.findByIpAddress(ipAddress);
+    }
+
 }

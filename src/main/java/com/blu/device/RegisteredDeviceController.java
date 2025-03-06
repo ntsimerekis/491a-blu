@@ -4,13 +4,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequestMapping("device")
 @RestController
 public class RegisteredDeviceController {
 
     @Autowired
     private RegisteredDeviceService registeredDeviceService;
 
-    @GetMapping
+    @GetMapping("/")
     public List<RegisteredDevice> getAllRegisteredDevices() {
         return registeredDeviceService.getAllRegisteredDevice();
     }

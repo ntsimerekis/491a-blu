@@ -37,7 +37,7 @@ public class RegisteredDevice {
     }
 
     public int getIpAddress() {
-        return ipAddress   ;
+        return ipAddress;
     }
 
     public RegisteredDevice() {
