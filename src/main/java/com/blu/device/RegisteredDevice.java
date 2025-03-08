@@ -10,15 +10,16 @@ import java.util.List;
 @Table(name="registered_devices")
 public class RegisteredDevice {
 
-    @Id
-    @Column(name="mac_address",
-            length=24,
-            nullable=false)
-    private String macAddress;
+//    @Id
+//    @Column(name="mac_address",
+//            length=24,
+//            nullable=false)
+//    private String macAddress;
 
+    @Id
     @Column(name="ip_address",
             nullable=false)
-    private int ipAddress;
+    private String ipAddress;
 
     @Column(nullable=false)
     private boolean active;
@@ -30,20 +31,20 @@ public class RegisteredDevice {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+
     private List<Path> paths = new ArrayList<>();
 
-    public String getMacAddress() {
-        return macAddress;
+    private List<Path> getPaths() {
+        return paths;
     }
 
-    public int getIpAddress() {
-        return ipAddress   ;
+    public String getIpAddress() {
+        return ipAddress;
     }
 
     public RegisteredDevice() {
     }
-    public RegisteredDevice(String macAddress, int ipAddress) {
-        this.macAddress = macAddress;
+    public RegisteredDevice(String ipAddress) {
         this.ipAddress = ipAddress;
     }
 

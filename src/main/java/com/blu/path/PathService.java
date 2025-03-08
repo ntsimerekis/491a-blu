@@ -1,9 +1,18 @@
 package com.blu.path;
+import com.blu.device.RegisteredDevice;
+import com.blu.device.RegisteredDeviceRepository;
+import com.blu.livepath.Position;
+import com.blu.user.User;
+import com.blu.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /*
     Basic CRUD for Paths
@@ -14,16 +23,20 @@ public class PathService {
     @Autowired
     private PathRepository pathRepository;
 
+    @Autowired
+    private RegisteredDeviceRepository registeredDeviceRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
     public List<Path> getAllPaths() {
         return pathRepository.findAll();
     }
 
-    public Optional<Path> getPathById(Long id) {
-        return pathRepository.findById(id);
-    }
-
-    public Path savePath(Path path) {
-        return pathRepository.save(path);
+    public void savePath(String pathName, String filePath, String username, String ipAddress) {
+        RegisteredDevice registeredDevice = registeredDeviceRepository.findByIpAddress(ipAddress);
+        User user = userRepository.findByEmail(username).get();
+        pathRepository.save(new Path(pathName, filePath, user, registeredDevice));
     }
 
     public void deletePath(Long id) {

@@ -19,9 +19,17 @@ public class Path {
 
     //foreign key
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name="mac_address", referencedColumnName = "mac_address")
     private RegisteredDevice registeredDevice;
 
+    public Path() {
+
+    }
+
+    public Path(String name, String file, User user, RegisteredDevice registeredDevice) {
+        this.file = file;
+        this.registeredDevice = registeredDevice;
+        this.id = new PathKey(user,name);
+    }
 
     public String getName() {
         return id.getName();
@@ -39,24 +47,13 @@ public class Path {
         this.file = file;
     }
 
+    public String getIpAddress() {
 
-    public String getMacAddress() {
-
-        return registeredDevice.getMacAddress();
+        return registeredDevice.getIpAddress();
     }
 
     public String getUsername() {
         return id.getUser().getUsername();
-    }
-
-
-    public Path(){}
-
-   public Path(String name, String file, int deviceMac, User user, RegisteredDevice registeredDevice) {
-
-        this.file = file;
-        this.registeredDevice = registeredDevice;
-        this.id = new PathKey(user,name);
     }
 
 }

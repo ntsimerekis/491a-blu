@@ -5,4 +5,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RegisteredDeviceRepository extends JpaRepository<RegisteredDevice, Long> {
+    boolean existsByIpAddress(String ipAddress);
+
+    RegisteredDevice findByIpAddress(String IpAddress);
 }

@@ -23,7 +23,7 @@ public class User implements UserDetails {
     private static boolean requireEmailVerification;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;
 

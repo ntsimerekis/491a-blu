@@ -1,4 +1,5 @@
 package com.blu.device;
+import com.blu.livepath.LivePathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ public class RegisteredDeviceService {
     @Autowired
     private RegisteredDeviceRepository registeredDeviceRepository;
 
+    @Autowired
+    private LivePathService livePathService;
+
     public List<RegisteredDevice> getAllRegisteredDevice() {
         return registeredDeviceRepository.findAll();
     }
@@ -23,6 +27,10 @@ public class RegisteredDeviceService {
     }
 
     public RegisteredDevice saveRegisteredDevice(RegisteredDevice registeredDevice) {
+        //New device new live thread!
+        String username = "ntsimrekis@yahoo.com";
+        livePathService.startCollecting(registeredDevice.getIpAddress(),username);
+
         return registeredDeviceRepository.save(registeredDevice);
     }
 
@@ -35,4 +43,5 @@ public class RegisteredDeviceService {
         // Insert data from the controller
         return registeredDeviceRepository.save(registeredDeviceDetails);
     }
+
 }

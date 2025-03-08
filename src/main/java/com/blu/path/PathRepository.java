@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PathRepository extends JpaRepository<Path, Long> {
+    String file(String file);
 }

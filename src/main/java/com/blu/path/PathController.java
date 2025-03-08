@@ -1,5 +1,6 @@
 package com.blu.path;
 
+import com.blu.livepath.LivePathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,23 +16,39 @@ public class PathController {
     @Autowired
     private PathService pathService;
 
-    @GetMapping
-    public List<Path> getAllPaths() {
-        return pathService.getAllPaths();
+    @Autowired
+    private LivePathService livePathService;
+
+    @PostMapping("{pathName}")
+    private boolean newPath(@PathVariable String pathName) {
+        String username = "ntsimerekis@yahoo.com";
+        livePathService.startRecording("[::1]", pathName, "ntsimerekis@yahoo.com");
+        return true;
     }
 
-    @PostMapping
-    public Path updatePath(@RequestBody Path path) {
-        return pathService.savePath(path);
+    @PostMapping("{pathName}/stop")
+    private boolean stopPath(@PathVariable String pathName) {
+        String username = "ntsimerekis@yahoo.com";
+        return livePathService.stopRecording("[::1]");
     }
 
-    @PutMapping("/{id}")
-    public Path updatePath(@PathVariable Long id, @RequestBody Path pathDetails) {
-        return pathService.updatePath(id, pathDetails);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deletePath(@PathVariable Long id) {
-        pathService.deletePath(id);
-    }
+//    @GetMapping
+//    public List<Path> getAllPaths() {
+//        return pathService.getAllPaths();
+//    }
+//
+//    @PostMapping
+//    public Path updatePath(@RequestBody Path path) {
+//        return pathService.savePath(path);
+//    }
+//
+//    @PutMapping("/{id}")
+//    public Path updatePath(@PathVariable Long id, @RequestBody Path pathDetails) {
+//        return pathService.updatePath(id, pathDetails);
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public void deletePath(@PathVariable Long id) {
+//        pathService.deletePath(id);
+//    }
 }

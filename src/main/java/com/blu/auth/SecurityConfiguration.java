@@ -1,8 +1,11 @@
 package com.blu.auth;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -35,17 +38,19 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf()
                 .disable()
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .requestMatchers("/**").permitAll().anyRequest().authenticated();
+//                .requestMatchers("/auth/**","/paths/**","/greetings/**")
+//                .permitAll()
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .authenticationProvider(authenticationProvider)
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -53,18 +58,31 @@ public class SecurityConfiguration {
     /*
         Addition cors config. Probably redundant
      */
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//
-//        configuration.setAllowedOrigins(List.of("*"));
-//        configuration.setAllowedMethods(List.of("*"));
-//        configuration.setAllowedHeaders(List.of("*"));
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//
-//        source.registerCorsConfiguration("/**",configuration);
-//
-//        return source;
-//    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
+
+        CorsConfiguration configuration = new CorsConfiguration();
+
+
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+
+
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+
+
+        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+
+
+        configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
+
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+
+        source.registerCorsConfiguration("/**", configuration);
+
+
+        return source;
+    }
 }
