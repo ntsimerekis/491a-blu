@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 /*
-    Business logic for the user endpoints. Wrapper arounf the UserRepository
+    Business logic for the user endpoints. Wrapper around the UserRepository
  */
 @Service
 public class UserService {

@@ -18,7 +18,7 @@ public class RegisteredDevice {
 
     @Column(name="ip_address",
             nullable=false)
-    private int ipAddress;
+    private String ipAddress;
 
     @Column(nullable=false)
     private boolean active;
@@ -36,13 +36,13 @@ public class RegisteredDevice {
         return macAddress;
     }
 
-    public int getIpAddress() {
+    public String getIpAddress() {
         return ipAddress;
     }
 
     public RegisteredDevice() {
     }
-    public RegisteredDevice(String macAddress, int ipAddress) {
+    public RegisteredDevice(String macAddress, String ipAddress) {
         this.macAddress = macAddress;
         this.ipAddress = ipAddress;
     }

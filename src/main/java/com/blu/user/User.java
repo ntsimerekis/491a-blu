@@ -45,12 +45,16 @@ public class User implements UserDetails {
     private Date updatedAt;
 
     @Column(nullable = false)
-    @ColumnDefault("false")
+    @ColumnDefault("true")
     private boolean admin;
 
     @Column(nullable = false)
     @ColumnDefault("false")
     private boolean emailVerified;
+
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private boolean isSuspended;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -108,11 +112,14 @@ public class User implements UserDetails {
 
     public void setEmailVerified(boolean emailVerified) {this.emailVerified = emailVerified;}
 
+    public boolean isUserSuspended() { return isSuspended; }
+
     public User(){}
 
-    public User(String email, String password, boolean admin) {
+    public User(String email, String password, boolean admin, boolean isSuspended) {
         this.email = email;
         this.password = password;
         this.admin = admin;
+        this.isSuspended = isSuspended;
     }
 }

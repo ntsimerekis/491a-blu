@@ -15,7 +15,7 @@ public class PathController {
     @Autowired
     private PathService pathService;
 
-    @GetMapping
+    @GetMapping("/")
     public List<Path> getAllPaths() {
         return pathService.getAllPaths();
     }
