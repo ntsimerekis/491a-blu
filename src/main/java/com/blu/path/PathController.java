@@ -1,10 +1,20 @@
 package com.blu.path;
 
 import com.blu.livepath.LivePathService;
+import com.blu.user.User;
+import com.blu.user.UserRepository;
+import org.springframework.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 /*
     Endpoints for path stuff
@@ -19,6 +29,12 @@ public class PathController {
     @Autowired
     private LivePathService livePathService;
 
+    @Autowired
+    PathRepository pathRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+    // Starting stopping paths ------------------------------------------------------------------------
     @PostMapping("{pathName}")
     private boolean newPath(@PathVariable String pathName) {
         String username = "ntsimerekis@yahoo.com";
@@ -27,9 +43,27 @@ public class PathController {
     }
 
     @PostMapping("{pathName}/stop")
-    private boolean stopPath(@PathVariable String pathName) {
+    public boolean stopPath(@PathVariable String pathName) {
         String username = "ntsimerekis@yahoo.com";
         return livePathService.stopRecording("[::1]");
+    }
+    // -------------------------------------------------------------------------------------------------
+
+    //Getting already existing paths
+    @GetMapping("{pathName}")
+    public ResponseEntity<InputStreamResource> getPathFile(@PathVariable String pathName, @RequestParam Optional<Boolean> json) throws FileNotFoundException {
+        String username = "ntsimerekis@yahoo.com";
+
+        Path path = pathRepository.getPathByEmailAndName(username, pathName);
+
+        File file = new File(path.getFile());
+        FileInputStream fileInputStream = new FileInputStream(file);
+        InputStreamResource inputStreamResource = new InputStreamResource(fileInputStream);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getName());
+
+        return new ResponseEntity<>(inputStreamResource, headers, HttpStatus.OK);
     }
 
 //    @GetMapping

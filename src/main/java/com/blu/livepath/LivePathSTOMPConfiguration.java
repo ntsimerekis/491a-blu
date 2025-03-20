@@ -27,6 +27,7 @@ public class LivePathSTOMPConfiguration implements WebSocketMessageBrokerConfigu
 
     @Override
     public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
+        //Websocket setup stuff
         registry.setMessageSizeLimit(4 * 8192);
         registry.setTimeToFirstMessage(30000);
     }

@@ -4,7 +4,6 @@ import com.blu.path.PathService;
 import org.apache.logging.log4j.LogManager;
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.config.CoapConfig;
-import org.eclipse.californium.elements.config.TcpConfig;
 import org.eclipse.californium.elements.config.UdpConfig;
 import org.eclipse.californium.elements.exception.ConnectorException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -30,7 +29,7 @@ public class PositionCollector implements Runnable {
     //Stop collecting data (unregistering a device)
     private boolean stopThread = false;
 
-    private int sampleRate = 3; //default
+    private int sampleRate = 1; //default
 
     //Record the Path Recording state
     private String pathName;
@@ -53,10 +52,11 @@ public class PositionCollector implements Runnable {
 
     private final PathService pathService;
 
+    //Some Californium setup stuff. Only need to one once but it's nice to have here
     static {
         CoapConfig.register();
         UdpConfig.register();
-        TcpConfig.register();
+//        TcpConfig.register();
     }
 
     public PositionCollector(String ipAddress, SimpMessagingTemplate messagingTemplate, String pathDirectory, PathService  pathService, String initialUserName) {

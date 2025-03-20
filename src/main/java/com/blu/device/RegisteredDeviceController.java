@@ -20,12 +20,7 @@ public class RegisteredDeviceController {
     }
 
     @PostMapping
-    public RegisteredDevice addRegisteredDevice(@RequestBody RegisteredDevice registeredDevice) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        User currentUser = (User) authentication.getPrincipal();
-
-
+    public RegisteredDevice addRegisteredDevice(@RequestBody RegisteredDevice registeredDevice) {;
 
         return registeredDeviceService.saveRegisteredDevice(registeredDevice);
     }

@@ -28,7 +28,7 @@ public class RegisteredDeviceService {
 
     public RegisteredDevice saveRegisteredDevice(RegisteredDevice registeredDevice) {
         //New device new live thread!
-        String username = "ntsimrekis@yahoo.com";
+        String username = "ntsimerekis@yahoo.com";
         livePathService.startCollecting(registeredDevice.getIpAddress(),username);
 
         return registeredDeviceRepository.save(registeredDevice);
