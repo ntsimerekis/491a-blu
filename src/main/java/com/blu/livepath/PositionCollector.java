@@ -3,6 +3,7 @@ package com.blu.livepath;
 import com.blu.path.PathService;
 import org.apache.logging.log4j.LogManager;
 import org.eclipse.californium.core.CoapClient;
+import org.eclipse.californium.core.CoapResponse;
 import org.eclipse.californium.core.config.CoapConfig;
 import org.eclipse.californium.elements.config.UdpConfig;
 import org.eclipse.californium.elements.exception.ConnectorException;
@@ -29,7 +30,7 @@ public class PositionCollector implements Runnable {
     //Stop collecting data (unregistering a device)
     private boolean stopThread = false;
 
-    private int sampleRate = 1; //default
+    private int sampleRate = 3; //default
 
     //Record the Path Recording state
     private String pathName;
@@ -44,7 +45,7 @@ public class PositionCollector implements Runnable {
 
     private final String pathDirectory;
 
-    private final CoapClient coapClient;
+    private CoapClient coapClient;
 
     private final Queue<Position> queue;
 
@@ -73,8 +74,13 @@ public class PositionCollector implements Runnable {
     public void run() {
         while(!stopThread) {
             try {
-                //Read value from CoAP Client
-                double[] coords = Arrays.stream(coapClient.get().getResponseText().split(","))
+                CoapResponse response;
+                //Read value from CoAP Client. If null, skip.
+                if ( (response = coapClient.get()) == null) {
+                    continue;
+                }
+
+                double[] coords = Arrays.stream(response.getResponseText().split(","))
                         .mapToDouble(Double::parseDouble)
                         .toArray();
 
@@ -110,7 +116,7 @@ public class PositionCollector implements Runnable {
                     log.error(e1);
                 }
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                log.info("Thread interrupted");
             }
         }
         //Here we are going to dump the queue into a file
@@ -149,6 +155,14 @@ public class PositionCollector implements Runnable {
     public void stop() {
         stopThread = true;
     }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+
+        coapClient.shutdown();
+        coapClient = new CoapClient("coap://" + ipAddress + "/" + "position");
+    }
+
 
     //Dumps the queue into a path file
     private void dumpPath() {

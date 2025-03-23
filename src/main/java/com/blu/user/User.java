@@ -1,5 +1,6 @@
 package com.blu.user;
 
+import com.blu.device.Device;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -52,10 +54,17 @@ public class User implements UserDetails {
     @ColumnDefault("false")
     private boolean emailVerified;
 
+    @OneToMany
+    private List<Device> devices;
+
+    @OneToOne
+    private Device activeDevice;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
+
 
     public User setEmail(String email) {
         this.email = email;
@@ -108,11 +117,24 @@ public class User implements UserDetails {
 
     public void setEmailVerified(boolean emailVerified) {this.emailVerified = emailVerified;}
 
+    public void addDevice(Device device) {
+        this.devices.add(device);
+    }
+
+    public List<Device> getDevices() {
+        return devices;
+    }
+
+    public Device getActiveDevice() {
+        return activeDevice;
+    }
+
     public User(){}
 
     public User(String email, String password, boolean admin) {
         this.email = email;
         this.password = password;
         this.admin = admin;
+        this.devices = new ArrayList<>();
     }
 }

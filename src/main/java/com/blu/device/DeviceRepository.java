@@ -4,8 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RegisteredDeviceRepository extends JpaRepository<RegisteredDevice, Long> {
+public interface DeviceRepository extends JpaRepository<Device, Long> {
     boolean existsByIpAddress(String ipAddress);
 
-    RegisteredDevice findByIpAddress(String IpAddress);
+    Device findByIpAddress(String IpAddress);
+
+    void deleteByIpAddress(String IpAddress);
 }

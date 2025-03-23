@@ -1,8 +1,10 @@
 package com.blu.path;
 
-import com.blu.device.RegisteredDevice;
+import com.blu.device.Device;
 import com.blu.user.User;
 import jakarta.persistence.*;
+
+import java.util.Objects;
 
 @Entity
 @Table(name = "paths")
@@ -19,16 +21,20 @@ public class Path {
 
     //foreign key
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private RegisteredDevice registeredDevice;
+    private Device device;
 
     public Path() {
 
     }
 
-    public Path(String name, String file, User user, RegisteredDevice registeredDevice) {
+    public Path(String name, String file, User user, Device device) {
         this.file = file;
-        this.registeredDevice = registeredDevice;
+        this.device = device;
         this.id = new PathKey(user,name);
+    }
+
+    public PathKey getId() {
+        return id;
     }
 
     public String getName() {
@@ -49,11 +55,24 @@ public class Path {
 
     public String getIpAddress() {
 
-        return registeredDevice.getIpAddress();
+        return device.getIpAddress();
     }
 
     public String getUsername() {
         return id.getUser().getUsername();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Path)) return false;
+        Path p = (Path) o;
+        return Objects.equals(getId(), p.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 
 }

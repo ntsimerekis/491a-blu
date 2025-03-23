@@ -29,32 +29,40 @@ public class LivePathService {
 
     private final Random random = new Random();
 
+    //Each user should have one thread which listens to a device. Then they can change their active device.
     private final HashMap<String, PositionCollector> collectTasks = new HashMap<>();
 
     //Starting and stopping path
     public void startCollecting(String ipAddress, String userName) {
         PositionCollector task = new PositionCollector(ipAddress, messagingTemplate, pathDirectory, pathService, userName);
         taskExecutor.execute(task);
-        collectTasks.put(ipAddress, task);
+        collectTasks.put(userName, task);
     }
 
-    public boolean startRecording(String ipAddress, String pathName, String username) {
-        return collectTasks.get(ipAddress).startRecording(pathName, username);
+    public boolean startRecording(String pathName, String username) {
+        return collectTasks.get(username).startRecording(pathName, username);
     }
 
-    public boolean pauseCurrentRecording(String ipAddress) {
-        return collectTasks.get(ipAddress).pauseRecording();
+    public boolean pauseCurrentRecording(String userName) {
+        return collectTasks.get(userName).pauseRecording();
     }
 
-    public boolean stopRecording(String ipAddress) {
-        return collectTasks.get(ipAddress).stopRecording();
+    public boolean stopRecording(String username) {
+        return collectTasks.get(username).stopRecording();
+    }
+
+    /*
+        Set active device
+     */
+    public void setActiveDevice(String userName, String ipAddress) {
+        collectTasks.get(userName).setIpAddress(ipAddress);
     }
 
     /*
      *  Stops all collecting threads! Careful
      */
-    public void stopCollectingThread(String ipAddress) {
-        collectTasks.get(ipAddress).stop();
+    public void stopCollectingThread(String userName) {
+        collectTasks.get(userName).stop();
     }
 
     public void stopAllCollectingThreads() {

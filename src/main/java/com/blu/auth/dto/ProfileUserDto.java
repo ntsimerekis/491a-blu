@@ -1,4 +1,4 @@
-package com.blu.auth.Dto;
+package com.blu.auth.dto;
 
 /*
     Simple dto for getting a profile json
