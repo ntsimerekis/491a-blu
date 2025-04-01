@@ -1,8 +1,11 @@
 package com.blu.path;
 
-import com.blu.device.RegisteredDevice;
+import com.blu.device.Device;
 import com.blu.user.User;
 import jakarta.persistence.*;
+
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "paths")
@@ -19,9 +22,21 @@ public class Path {
 
     //foreign key
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name="mac_address", referencedColumnName = "mac_address")
-    private RegisteredDevice registeredDevice;
+    private Device device;
 
+    public Path() {
+
+    }
+
+    public Path(String name, String file, User user, Device device) {
+        this.file = file;
+        this.device = device;
+        this.id = new PathKey(user,name);
+    }
+
+    public PathKey getId() {
+        return id;
+    }
 
     public String getName() {
         return id.getName();
@@ -39,24 +54,26 @@ public class Path {
         this.file = file;
     }
 
+    public String getIpAddress() {
 
-    public String getMacAddress() {
-
-        return registeredDevice.getMacAddress();
+        return device.getIpAddress();
     }
 
     public String getUsername() {
         return id.getUser().getUsername();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Path)) return false;
+        Path p = (Path) o;
+        return Objects.equals(getId(), p.getId());
+    }
 
-    public Path(){}
-
-   public Path(String name, String file, int deviceMac, User user, RegisteredDevice registeredDevice) {
-
-        this.file = file;
-        this.registeredDevice = registeredDevice;
-        this.id = new PathKey(user,name);
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 
 }

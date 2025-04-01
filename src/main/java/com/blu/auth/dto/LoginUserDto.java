@@ -1,4 +1,4 @@
-package com.blu.auth.Dto;
+package com.blu.auth.dto;
 
 /*
     Stores a login json

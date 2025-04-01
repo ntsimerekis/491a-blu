@@ -1,9 +1,12 @@
 package com.blu.path;
+import com.blu.device.Device;
+import com.blu.device.DeviceRepository;
+import com.blu.user.User;
+import com.blu.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /*
     Basic CRUD for Paths
@@ -14,25 +17,15 @@ public class PathService {
     @Autowired
     private PathRepository pathRepository;
 
-    public List<Path> getAllPaths() {
-        return pathRepository.findAll();
-    }
+    @Autowired
+    private DeviceRepository deviceRepository;
 
-    public Optional<Path> getPathById(Long id) {
-        return pathRepository.findById(id);
-    }
+    @Autowired
+    private UserRepository userRepository;
 
-    public Path savePath(Path path) {
-        return pathRepository.save(path);
-    }
-
-    public void deletePath(Long id) {
-        pathRepository.deleteById(id);
-    }
-
-    public Path updatePath(Long id, Path pathDetails) {
-        Path path = pathRepository.findById(id).orElseThrow();
-        // Insert data from the controller
-        return pathRepository.save(path);
+    public void savePath(String pathName, String filePath, String username, String ipAddress) {
+        Device device = deviceRepository.findByIpAddress(ipAddress);
+        User user = userRepository.findByEmail(username).get();
+        pathRepository.save(new Path(pathName, filePath, user, device));
     }
 }

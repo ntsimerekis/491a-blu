@@ -1,7 +1,7 @@
 package com.blu.auth;
 
-import com.blu.auth.Dto.LoginUserDto;
-import com.blu.auth.Dto.RegisterUserDto;
+import com.blu.auth.dto.LoginUserDto;
+import com.blu.auth.dto.RegisterUserDto;
 import com.blu.auth.exception.EmailAlreadyExistsException;
 import com.blu.user.User;
 import com.blu.user.UserRepository;
@@ -9,10 +9,8 @@ import com.blu.user.UserRepository;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;

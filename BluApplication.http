@@ -1,0 +1,97 @@
+### Register a user
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "fullName": "Nicholas Tsimerekis",
+  "email" : "ntsimerekis@yahoo.com",
+  "password" : "hello"
+}
+
+### Signup a nother user
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "fullName": "Nicholas Andrade",
+  "email" : "nandrade@yahoo.com",
+  "password" : "hello"
+}
+
+### Authenticate user and get webtoken
+
+GET http://localhost:8080/auth/confirm/0jqpBopdNVXKljY9no-manHqGsvh1wF69lpxe5pl_e4
+
+###
+
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email" : "ntsimerekis@yahoo.com",
+  "password" : "hello"
+}
+
+### Get all users
+GET http://localhost:8080/users/
+###
+
+### Get my own user (/me always returns your user)
+GET http://localhost:8080/users/me
+###
+
+### Get information about another suer
+GET http://localhost:8080/users/ntsimerekis@yahoo.com
+###
+
+### Delete a user
+DELETE http://localhost:8080/users/nandrade@yahoo.com
+
+### Get all paths for a specific user
+GET http://localhost:8080/paths/ntsimerekis@yahoo.com
+
+### Register a device
+POST http://localhost:8080/devices/ntsimerekis@yahoo.com
+Content-Type: application/json
+
+{
+  "name" : "mylocal",
+  "ipAddress": "[::1]",
+  "active" : true
+}
+
+### Set device to inactive
+POST http://localhost:8080/devices/ntsimerekis@yahoo.com
+Content-Type: application/json
+
+{
+  "name" : "localhost3",
+  "ipAddress": "[::1]",
+  "active" : false
+}
+
+### Get all devices associated with a user
+GET http://localhost:8080/devices/ntsimerekis@yahoo.com
+
+### Get information on a specific device
+DELETE http://localhost:8080/devices/ntsimerekis@yahoo.com/::1
+
+### Start a new path on user ntsimerekis called johnspath
+POST http://localhost:8080/paths/ntsimerekis@yahoo.com/johnspath
+
+
+### Pause path collection
+POST http://localhost:8080/paths/ntsimerekis@yahoo.com/johnspath/pause
+
+<> 2025-04-01T015943.500.json
+<> 2025-04-01T015926.500.json
+<> f-7.txt
+
+### Resume path collection
+POST http://localhost:8080/paths/ntsimerekis@yahoo.com/johnspath/resume
+
+### Stop path collection
+POST http://localhost:8080/paths/johnspath/stop
+
+###
+

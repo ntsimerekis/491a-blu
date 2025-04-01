@@ -21,8 +21,8 @@ public class ConfirmationToken {
     @Column(name = "confirmation_tokens")
     private String confirmationToken;
 
-    @OneToOne(fetch = FetchType.EAGER ,cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id", nullable = false)
+    @OneToOne(fetch = FetchType.EAGER ,cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 

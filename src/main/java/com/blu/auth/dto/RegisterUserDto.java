@@ -1,9 +1,10 @@
-package com.blu.auth.Dto;
+package com.blu.auth.dto;
 
 /*
     Simple DTO for getting a register user JSON
  */
 public class RegisterUserDto {
+
     private String email;
 
     private String password;
@@ -33,4 +34,5 @@ public class RegisterUserDto {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
+
 }
