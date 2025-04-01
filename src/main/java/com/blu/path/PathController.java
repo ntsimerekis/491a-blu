@@ -34,10 +34,20 @@ public class PathController {
     @Autowired
     private UserRepository userRepository;
 
-    // Starting stopping paths ------------------------------------------------------------------------
+    // Starting - pausing - resuming - stopping paths ----------------------------------------------------
     @PostMapping("/{email}/{pathName}")
     private boolean newPath(@PathVariable String email, @PathVariable String pathName) {
         return livePathService.startRecording(pathName, email);
+    }
+
+    @PostMapping("/{email}/{pathName}/pause")
+    public boolean pausePath(@PathVariable String email, @PathVariable String pathName) {
+        return livePathService.pauseRecording(email);
+    }
+
+    @PostMapping("/{email}/{pathName}/resume")
+    public boolean resumePath(@PathVariable String email, @PathVariable String pathName) {
+        return livePathService.resumeRecording(email);
     }
 
     @PostMapping("/{email}/{pathName}/stop")
@@ -61,6 +71,9 @@ public class PathController {
         return new ResponseEntity<>(inputStreamResource, headers, HttpStatus.OK);
     }
 
+    /*
+        List out all the paths
+     */
     @GetMapping("/{email}")
     public List<Path> getAllPaths(@PathVariable String email) {
         return pathRepository.getPathsByEmail(email);
@@ -69,7 +82,7 @@ public class PathController {
 
     // Delete a Path ------------------------------------------------------------------------
     @DeleteMapping("/{email}/{pathName}")
-    public void deletePath(@PathVariable String pathName, @PathVariable String email) {
+    public void deletePath(@PathVariable String email, @PathVariable String pathName) {
         pathRepository.deletePathByEmailAndName(email, pathName);
     }
     // -------------------------------------------------------------------------------------------------

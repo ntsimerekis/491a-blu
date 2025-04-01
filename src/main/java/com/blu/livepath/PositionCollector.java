@@ -92,16 +92,15 @@ public class PositionCollector implements Runnable {
 
                 if (recording) {
                     //We are recording, let's record this point
-                    queue.add(pos);
+                    if(!paused) {
+                        queue.add(pos);
+                    }
                 } else {
                     //We are not recording. Let's check the queue to see if there is some data recorded
                     if (queue.size() > 1) {
-                        //Ok we have some data. If we are not paused right now we will dump it
-                        if (!paused) {
-                            dumpPath();
-                            //Now the queue is cleared and stored in the database
-                            //Recording is STOPPED
-                        }
+                        dumpPath();
+                        //Now the queue is cleared and stored in the database
+                        //Recording is STOPPED
 
                         //Else we are paused and we ought not to dump the path
                     }
@@ -143,6 +142,15 @@ public class PositionCollector implements Runnable {
         return false;
     }
 
+    public boolean resumeRecording() {
+        if (recording) {
+            this.paused = false;
+            return true;
+        }
+        //can't resume if not recording
+        return false;
+    }
+
     public boolean stopRecording() {
         if (recording) {
             recording = false;
@@ -152,15 +160,26 @@ public class PositionCollector implements Runnable {
         return false;
     }
 
+    public boolean isRecording() {
+        return recording;
+    }
+
     public void stop() {
         stopThread = true;
     }
 
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+    public boolean setIpAddress(String ipAddress) {
 
-        coapClient.shutdown();
-        coapClient = new CoapClient("coap://" + ipAddress + "/" + "position");
+        if (!recording) {
+            this.ipAddress = ipAddress;
+
+            coapClient.shutdown();
+            coapClient = new CoapClient("coap://" + ipAddress + "/" + "position");
+            return true;
+        }
+
+        //We can't change the ip address if we are recording!
+        return false;
     }
 
 

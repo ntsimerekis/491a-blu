@@ -5,6 +5,7 @@ import com.blu.user.User;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "paths")

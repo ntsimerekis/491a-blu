@@ -37,8 +37,8 @@ public class Device {
 //        return paths;
 //    }
 
-//    @ManyToOne
-//    private User owner;
+    @ManyToOne
+    private User owner;
 
     public String getIpAddress() {
         return ipAddress;
@@ -69,7 +69,7 @@ public class Device {
 
     public Device(String name, String ipAddress, User owner, boolean active) {
         this.ipAddress = ipAddress;
-        //this.owner = owner;
+        this.owner = owner;
         this.name = name;
         //Need to change later
         this.size = 0;

@@ -1,6 +1,7 @@
 package com.blu.user;
 
 import com.blu.device.Device;
+import com.blu.path.Path;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,10 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /*
     Defines a user object/entity that extends the spring boot UserDetails class.
@@ -54,7 +52,7 @@ public class User implements UserDetails {
     @ColumnDefault("false")
     private boolean emailVerified;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", orphanRemoval = true)
     private List<Device> devices;
 
     @OneToOne
@@ -64,6 +62,9 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "id.user")
+    public Set<Path> paths;
 
 
     public User setEmail(String email) {

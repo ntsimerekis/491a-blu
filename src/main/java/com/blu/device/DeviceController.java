@@ -4,9 +4,13 @@ import com.blu.livepath.LivePathService;
 import com.blu.user.User;
 import com.blu.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/devices")
@@ -30,7 +34,12 @@ public class DeviceController {
     }
 
     @PostMapping("/{email}")
-    public Device addRegisteredDevice(@PathVariable String email, @RequestBody DeviceDto deviceDto) {;
+    public ResponseEntity<String> addRegisteredDevice(@PathVariable String email, @RequestBody DeviceDto deviceDto) {;
+
+        //Initial check on isRecording and active. Let's just get that taken care of right away
+        if (livePathService.isRecording(email) && deviceDto.isActive()) {
+            return ResponseEntity.status(HttpStatusCode.valueOf(409)).body("Can not create or switch to an active device while a recording is in progress");
+        }
 
         //Extract owner User object
         User owner = userRepository.findByEmail(email).orElseThrow();
@@ -60,10 +69,10 @@ public class DeviceController {
             //First device, first thread!
             livePathService.startCollecting(device.getIpAddress(), email);
 
-//            //Set this as an active device no matter what
+//          //Set this as an active device no matter what
             device.setActive(true);
 //
-//            //Resave the device
+//          //Resave the device
             deviceRepository.save(device);
 
             //Set user's active device in the database
@@ -96,7 +105,7 @@ public class DeviceController {
 //            userRepository.save(owner);
 //        }
 
-        return device;
+        return ResponseEntity.ok("Device added successfully");
     }
 
     @GetMapping("/{email}")
@@ -109,8 +118,27 @@ public class DeviceController {
 //        return deviceService.updateRegisteredDevice(id, deviceDetails);
 //    }
 
-    @DeleteMapping("/{ipAddress}")
-    public void deleteRegisteredDevice(@PathVariable String ipAddress) {
-        deviceRepository.deleteByIpAddress(ipAddress);
+    @DeleteMapping("/{email}/{ipAddress}")
+    public ResponseEntity<String> deleteRegisteredDevice(@PathVariable String email, @PathVariable String ipAddress) {
+        //temporary
+        ipAddress = "[" + ipAddress + "]";
+
+        //Check if user exists
+        User user;
+        Optional<User> opt_user = userRepository.findByEmail(email);
+        if (opt_user.isPresent()){
+            user = opt_user.get();
+        } else {
+            return ResponseEntity.status(HttpStatusCode.valueOf(404)).body("User not found");
+        }
+
+        //Check if a device is active
+        if (Objects.equals(user.getActiveDevice().getIpAddress(), ipAddress)) {
+            return ResponseEntity.status(HttpStatusCode.valueOf(409)).body("Can not delete an active device");
+        }
+
+        deviceRepository.deleteByEmailAndIpAddress(email, ipAddress);
+
+        return ResponseEntity.ok("Device deleted successfully");
     }
 }

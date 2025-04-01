@@ -43,8 +43,12 @@ public class LivePathService {
         return collectTasks.get(username).startRecording(pathName, username);
     }
 
-    public boolean pauseCurrentRecording(String userName) {
+    public boolean pauseRecording(String userName) {
         return collectTasks.get(userName).pauseRecording();
+    }
+
+    public boolean resumeRecording(String userName) {
+        return collectTasks.get(userName).resumeRecording();
     }
 
     public boolean stopRecording(String username) {
@@ -54,8 +58,19 @@ public class LivePathService {
     /*
         Set active device
      */
-    public void setActiveDevice(String userName, String ipAddress) {
-        collectTasks.get(userName).setIpAddress(ipAddress);
+    public boolean setActiveDevice(String userName, String ipAddress) {
+        return collectTasks.get(userName).setIpAddress(ipAddress);
+    }
+
+    /*
+        Check if we are recording
+     */
+    public boolean isRecording(String userName) {
+        try {
+            return collectTasks.get(userName).isRecording();
+        } catch (NullPointerException e) {
+            return false;
+        }
     }
 
     /*
