@@ -6,6 +6,7 @@ import com.blu.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -111,6 +112,12 @@ public class DeviceController {
     @GetMapping("/{email}")
     public List<Device> getDeviceByEmail(@PathVariable String email) {
         return userRepository.getDevicesByEmail(email);
+    }
+
+    @GetMapping("/{email}/{ipAddress}")
+    public Device getDeviceByIp(@PathVariable String email, @PathVariable String ipAddress) {
+        ipAddress = "[" + ipAddress + "]";
+        return deviceRepository.findByIpAddress(ipAddress);
     }
 
 //    @PutMapping("/{id}")

@@ -13,6 +13,8 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
 
     Device findByIpAddress(String IpAddress);
 
+    Device findDeviceByIpAddress(String IpAddress);
+
     @Transactional
     @Modifying
     @Query("DELETE FROM Device d WHERE d.ipAddress = :ipAddress")
