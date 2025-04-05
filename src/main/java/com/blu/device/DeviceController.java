@@ -36,6 +36,9 @@ public class DeviceController {
 
     @PostMapping("/{email}")
     public ResponseEntity<String> addRegisteredDevice(@PathVariable String email, @RequestBody DeviceDto deviceDto) {;
+        //Add brackets if they do not exist.
+        if (!deviceDto.getIpAddress().contains("["))
+            deviceDto.setIpAddress("[" + deviceDto.getIpAddress() + "]");
 
         //Initial check on isRecording and active. Let's just get that taken care of right away
         if (livePathService.isRecording(email) && deviceDto.isActive()) {
