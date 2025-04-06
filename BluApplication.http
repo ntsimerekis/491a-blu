@@ -77,21 +77,21 @@ GET http://localhost:8080/devices/ntsimerekis@yahoo.com
 DELETE http://localhost:8080/devices/ntsimerekis@yahoo.com/::1
 
 ### Start a new path on user ntsimerekis called johnspath
-POST http://localhost:8080/paths/ntsimerekis@yahoo.com/johnspath
+POST http://localhost:8080/paths/ntsimerekis@yahoo.com/andrade
 
 
 ### Pause path collection
-POST http://localhost:8080/paths/ntsimerekis@yahoo.com/johnspath/pause
+POST http://localhost:8080/paths/ntsimerekis@yahoo.com/andrade/pause
 
 <> 2025-04-01T015943.500.json
 <> 2025-04-01T015926.500.json
 <> f-7.txt
 
 ### Resume path collection
-POST http://localhost:8080/paths/ntsimerekis@yahoo.com/johnspath/resume
+POST http://localhost:8080/paths/ntsimerekis@yahoo.com/andrade/resume
 
 ### Stop path collection
-POST http://localhost:8080/paths/johnspath/stop
+POST http://localhost:8080/paths/ntsimerekis@yahoo.com/andrade/stop
 
 ###
 

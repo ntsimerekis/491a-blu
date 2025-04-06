@@ -53,6 +53,11 @@ public class PositionCollector implements Runnable {
 
     private final PathService pathService;
 
+    private long originalTimestamp;
+
+    private long pausedTimestamp;
+
+
     //Some Californium setup stuff. Only need to one once but it's nice to have here
     static {
         CoapConfig.register();
@@ -85,7 +90,7 @@ public class PositionCollector implements Runnable {
                         .toArray();
 
                 //coords[0] = x, coords[1] = y
-                var pos = new Position(coords[0], coords[1]);
+                var pos = new Position(coords[0], coords[1], getElapsedTime() - originalTimestamp);
 
                 //Tell the frontend anbout this point
                 messagingTemplate.convertAndSend("/topic/" + userName, pos);
@@ -127,6 +132,8 @@ public class PositionCollector implements Runnable {
             this.pathName = pathName;
             this.userName = userName;
             recording = true;
+            originalTimestamp = System.currentTimeMillis();
+            pausedTimestamp = 0;
             return true;
         }
         // We are recording right now, we can not make a new recording
@@ -136,8 +143,10 @@ public class PositionCollector implements Runnable {
     public boolean pauseRecording() {
         if (recording) {
             this.paused = true;
+            pausedTimestamp = System.currentTimeMillis();
             return true;
         }
+
         //can't pause if not recording
         return false;
     }
@@ -166,6 +175,10 @@ public class PositionCollector implements Runnable {
 
     public void stop() {
         stopThread = true;
+    }
+
+    public long getElapsedTime() {
+        return System.currentTimeMillis() - pausedTimestamp;
     }
 
     public boolean setIpAddress(String ipAddress) {
