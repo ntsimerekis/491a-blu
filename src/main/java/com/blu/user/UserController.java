@@ -1,5 +1,6 @@
 package com.blu.user;
 
+import com.blu.device.Device;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,10 +30,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> allUsers() {
-        List <User> users = userService.allUsers();
-
-        return ResponseEntity.ok(users);
+    public List<User> allUsers() {
+        return userService.allUsers();
     }
 
     @PostMapping
