@@ -8,7 +8,7 @@ Content-Type: application/json
   "password" : "hello"
 }
 
-### Signup a nother user
+### Signup another user
 POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
@@ -91,7 +91,7 @@ POST http://localhost:8080/paths/ntsimerekis@yahoo.com/johnspath/pause
 POST http://localhost:8080/paths/ntsimerekis@yahoo.com/johnspath/resume
 
 ### Stop path collection
-POST http://localhost:8080/paths/johnspath/stop
+POST http://localhost:8080/paths/ntsimerekis@yahoo.com/johnspath/stop
 
 ###
 

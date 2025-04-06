@@ -49,6 +49,8 @@ public class PositionCollector implements Runnable {
 
     private final Queue<Position> queue;
 
+    private final Queue<Long> timestamps;
+
     private final SimpMessagingTemplate messagingTemplate;
 
     private final PathService pathService;
@@ -65,6 +67,7 @@ public class PositionCollector implements Runnable {
         this.userName = initialUserName;
         this.coapClient = new CoapClient("coap://" + ipAddress + "/" + "position");
         this.queue = new LinkedList<>();
+        this.timestamps = new LinkedList<>();
         this.messagingTemplate = messagingTemplate;
         this.pathDirectory = pathDirectory;
         this.pathService = pathService;
@@ -87,13 +90,16 @@ public class PositionCollector implements Runnable {
                 //coords[0] = x, coords[1] = y
                 var pos = new Position(coords[0], coords[1]);
 
-                //Tell the frontend anbout this point
+
+                //Tell the frontend about this point
                 messagingTemplate.convertAndSend("/topic/" + userName, pos);
 
                 if (recording) {
                     //We are recording, let's record this point
                     if(!paused) {
                         queue.add(pos);
+                        timestamps.add(System.currentTimeMillis());
+
                     }
                 } else {
                     //We are not recording. Let's check the queue to see if there is some data recorded
@@ -189,11 +195,15 @@ public class PositionCollector implements Runnable {
         try {
             File file = new File(filePath);
             file.getParentFile().mkdirs();
+
             PrintStream pathOut = new PrintStream(new FileOutputStream(file));
 
             //We've defined the toString method in the record
-            queue.forEach(pathOut::println);
+            int numberOfLines = queue.size();
 
+            for (int i = 0; i < numberOfLines; i++) {
+                pathOut.println(queue.poll() + "," + timestamps.poll());
+            }
             pathOut.close();
 
             //Store in Mariadb
