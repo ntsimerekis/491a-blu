@@ -61,7 +61,15 @@ public class PathController {
     public ResponseEntity<InputStreamResource> getPathFile(@PathVariable String pathName, @PathVariable String email, @RequestParam Optional<Boolean> json) throws FileNotFoundException {
         Path path = pathRepository.getPathByEmailAndName(email, pathName);
 
-        File file = new File(path.getFile());
+        String filePath = path.getFile();
+
+        if (json.isPresent()) {
+            if (json.get()) {
+                filePath = filePath.replace(".path", ".json");
+            }
+        }
+
+        File file = new File(filePath);
         FileInputStream fileInputStream = new FileInputStream(file);
         InputStreamResource inputStreamResource = new InputStreamResource(fileInputStream);
 
