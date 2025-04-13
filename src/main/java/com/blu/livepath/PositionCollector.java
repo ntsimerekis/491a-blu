@@ -1,6 +1,8 @@
 package com.blu.livepath;
 
 import com.blu.path.PathService;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapResponse;
@@ -53,10 +55,7 @@ public class PositionCollector implements Runnable {
 
     private final PathService pathService;
 
-    private long originalTimestamp;
-
-    private long pausedTimestamp;
-
+    private Timer timer;
 
     //Some Californium setup stuff. Only need to one once but it's nice to have here
     static {
@@ -73,6 +72,7 @@ public class PositionCollector implements Runnable {
         this.messagingTemplate = messagingTemplate;
         this.pathDirectory = pathDirectory;
         this.pathService = pathService;
+        this.timer = new Timer();
     }
 
     @Override
@@ -90,7 +90,7 @@ public class PositionCollector implements Runnable {
                         .toArray();
 
                 //coords[0] = x, coords[1] = y
-                var pos = new Position(coords[0], coords[1], getElapsedTime() - originalTimestamp);
+                var pos = new Position(coords[0], coords[1], timer.getElapsedTime());
 
                 //Tell the frontend anbout this point
                 messagingTemplate.convertAndSend("/topic/" + userName, pos);
@@ -132,8 +132,8 @@ public class PositionCollector implements Runnable {
             this.pathName = pathName;
             this.userName = userName;
             recording = true;
-            originalTimestamp = System.currentTimeMillis();
-            pausedTimestamp = 0;
+            timer = new Timer();
+            timer.start();
             return true;
         }
         // We are recording right now, we can not make a new recording
@@ -143,7 +143,7 @@ public class PositionCollector implements Runnable {
     public boolean pauseRecording() {
         if (recording) {
             this.paused = true;
-            pausedTimestamp = System.currentTimeMillis();
+            timer.pause();
             return true;
         }
 
@@ -154,6 +154,7 @@ public class PositionCollector implements Runnable {
     public boolean resumeRecording() {
         if (recording) {
             this.paused = false;
+            timer.resume();
             return true;
         }
         //can't resume if not recording
@@ -163,6 +164,7 @@ public class PositionCollector implements Runnable {
     public boolean stopRecording() {
         if (recording) {
             recording = false;
+            timer.stop();
             return true;
         }
         //We are already stopped
@@ -175,10 +177,6 @@ public class PositionCollector implements Runnable {
 
     public void stop() {
         stopThread = true;
-    }
-
-    public long getElapsedTime() {
-        return System.currentTimeMillis() - pausedTimestamp;
     }
 
     public boolean setIpAddress(String ipAddress) {
@@ -198,17 +196,34 @@ public class PositionCollector implements Runnable {
 
     //Dumps the queue into a path file
     private void dumpPath() {
+        String jsonPath = pathDirectory + userName + "/" + pathName + ".json";
         String filePath = pathDirectory + userName + "/" + pathName + ".path";
         try {
+            File json = new File(jsonPath);
             File file = new File(filePath);
             file.getParentFile().mkdirs();
+
             PrintStream pathOut = new PrintStream(new FileOutputStream(file));
+            PrintStream jsonOut = new PrintStream(new FileOutputStream(json));
 
             //We've defined the toString method in the record
-            queue.forEach(pathOut::println);
+            //queue.forEach(pathOut::println);
+            JsonGenerator jg = new JsonFactory().createGenerator(jsonOut);
+            jg.writeStartArray();
+            for (Position position : queue) {
+                pathOut.println(position);
+                jg.writeStartObject();
+                jg.writeNumberField("x", position.x());
+                jg.writeNumberField("y", position.y());
+                jg.writeNumberField("timestamp", position.timestamp());
+                jg.writeEndObject();
+                jg.flush();
+            }
+            jg.writeEndArray();
+            jg.close();
 
             pathOut.close();
-
+            jsonOut.close();
             //Store in Mariadb
             pathService.savePath(pathName, filePath, userName, ipAddress);
 

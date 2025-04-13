@@ -21,7 +21,7 @@ public interface PathRepository extends JpaRepository<Path, Long> {
     List<Path> getPathsByEmail(@Param("email") String email);
 
     //We have to put this in since JPA doesn't make an automati query for Embedded IDs
-    @Query("SELECT p.id.name, p.device.ipAddress FROM Path p WHERE p.id.name = :name and p.id.user.email = :email")
+    @Query("SELECT p FROM Path p WHERE p.id.name = :name and p.id.user.email = :email")
     Path getPathByEmailAndName(@Param("email") String email, @Param("name") String name);
 
     @Query("DELETE FROM Path p WHERE p.id.name = :name and p.id.user.email = :email")
