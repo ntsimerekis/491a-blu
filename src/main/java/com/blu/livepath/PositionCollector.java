@@ -73,6 +73,7 @@ public class PositionCollector implements Runnable {
         this.pathDirectory = pathDirectory;
         this.pathService = pathService;
         this.timer = new Timer();
+        this.timer.start();
     }
 
     @Override
@@ -132,8 +133,8 @@ public class PositionCollector implements Runnable {
             this.pathName = pathName;
             this.userName = userName;
             recording = true;
-            timer = new Timer();
-            timer.start();
+            this.timer = new Timer();
+            this.timer.start();
             return true;
         }
         // We are recording right now, we can not make a new recording
