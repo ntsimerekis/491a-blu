@@ -3,6 +3,8 @@ package com.blu.path;
 import com.blu.livepath.LivePathService;
 import com.blu.user.User;
 import com.blu.user.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -10,9 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +37,9 @@ public class PathController {
     PathRepository pathRepository;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     // Starting - pausing - resuming - stopping paths ----------------------------------------------------
     @PostMapping("/{email}/{pathName}")
@@ -83,8 +90,18 @@ public class PathController {
         List out all the paths
      */
     @GetMapping("/{email}")
-    public List<Path> getAllPaths(@PathVariable String email) {
-        return pathRepository.getPathsByEmail(email);
+    public List<ObjectNode> getAllPaths(@PathVariable String email) {
+        final List<ObjectNode> paths = new ArrayList<ObjectNode>();
+        pathRepository.getPathsByEmail(email).forEach(path -> {
+            ObjectNode pathNode = mapper.createObjectNode();
+            pathNode.put("name", path.getName());
+            pathNode.put("email", path.getUsername());
+//            pathNode.put("timestamp", path.getTimestamp());
+            pathNode.put("ip_address", path.getIpAddress());
+            paths.add(pathNode);
+        });
+
+        return paths;
     }
     // -------------------------------------------------------------------------------------------------
 
