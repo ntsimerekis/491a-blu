@@ -3,7 +3,10 @@ package com.blu.path;
 import com.blu.device.Device;
 import com.blu.user.User;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;
 
@@ -24,6 +27,10 @@ public class Path {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Device device;
 
+    @CreationTimestamp
+    @Column(name = "create_date")
+    private Timestamp createDate;
+
     public Path() {
 
     }
@@ -32,6 +39,7 @@ public class Path {
         this.file = file;
         this.device = device;
         this.id = new PathKey(user,name);
+        this.createDate = new Timestamp(System.currentTimeMillis());
     }
 
     public PathKey getId() {
@@ -63,16 +71,21 @@ public class Path {
         return id.getUser().getUsername();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Path)) return false;
-        Path p = (Path) o;
-        return Objects.equals(getId(), p.getId());
+    public Timestamp getCreateDate() {
+        return createDate;
     }
 
     @Override
-    public int hashCode() {
+    final public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Path)) return false;
+        Path p = (Path) o;
+        return Objects.equals(getId().hashCode(), p.getId().hashCode());
+    }
+
+
+    @Override
+    final public int hashCode() {
         return Objects.hash(getId());
     }
 

@@ -96,7 +96,7 @@ public class PathController {
             ObjectNode pathNode = mapper.createObjectNode();
             pathNode.put("name", path.getName());
             pathNode.put("email", path.getUsername());
-//            pathNode.put("timestamp", path.getTimestamp());
+            pathNode.put("timestamp", path.getCreateDate().toString());
             pathNode.put("ip_address", path.getIpAddress());
             paths.add(pathNode);
         });

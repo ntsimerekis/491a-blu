@@ -16,16 +16,15 @@ public class PathKey implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name="email",referencedColumnName = "email")
+    @JoinColumn(name="id",referencedColumnName = "id")
     private User user;
 
     @Column(name="name",
             length=255)
     private String name;
 
-    public PathKey setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
     public String getName() {
         return name;
