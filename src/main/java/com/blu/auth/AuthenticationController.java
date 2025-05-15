@@ -66,4 +66,10 @@ public class AuthenticationController {
         authenticationService.makeAdmin(email, isAdmin);
         return ResponseEntity.ok(true);
     }
+
+    @PostMapping("/changestatus/{email}/{enabled}")
+    public ResponseEntity<Boolean> changeStatus(@PathVariable String email, @PathVariable boolean enabled) {
+        authenticationService.enableUser(email, enabled);
+        return ResponseEntity.ok(true);
+    }
 }

@@ -50,6 +50,15 @@ public class User implements UserDetails {
     private boolean admin;
 
     @Column(nullable = false)
+    @ColumnDefault("true")
+    private boolean enabled;
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Column(nullable = false)
     @ColumnDefault("false")
     private boolean emailVerified;
 
@@ -116,6 +125,10 @@ public class User implements UserDetails {
         return this;
     }
 
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public void setAdmin(boolean admin) {
             this.admin = admin;
     }
@@ -145,5 +158,6 @@ public class User implements UserDetails {
         this.password = password;
         this.admin = admin;
         this.devices = new ArrayList<>();
+        this.enabled = true;
     }
 }

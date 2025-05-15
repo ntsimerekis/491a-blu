@@ -201,4 +201,11 @@ public class AuthenticationService {
 
         userRepository.save(user);
     }
+
+    public void enableUser(String email, boolean enable){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(email));
+        user.setEnabled(enable);
+        userRepository.save(user);
+    }
 }

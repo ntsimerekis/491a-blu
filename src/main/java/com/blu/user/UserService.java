@@ -53,4 +53,10 @@ public class UserService {
     // Gets user by email
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));}
+
+    public void enableUser(String email, boolean enable) {
+        User user = getUserByEmail(email);
+        user.setEnabled(enable);
+        saveUser(user);
+    }
 }
