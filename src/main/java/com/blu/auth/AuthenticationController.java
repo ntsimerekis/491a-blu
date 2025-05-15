@@ -36,9 +36,9 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.forgotPassword(email));
     }
 
-    @PostMapping("/confirmForgotPassword/{email}")
-    public ResponseEntity<Boolean> confirmForgotPassword(@PathVariable String email, @RequestBody RegisterUserDto registerUserDto) {
-        return ResponseEntity.ok(authenticationService.confirmForgotPassword(registerUserDto,email));
+    @PostMapping("/confirmForgotPassword/{confirmationToken}")
+    public ResponseEntity<Boolean> confirmForgotPassword(@PathVariable String confirmationToken, @RequestBody RegisterUserDto registerUserDto) {
+        return ResponseEntity.ok(authenticationService.confirmForgotPassword(registerUserDto,confirmationToken));
     }
 
 

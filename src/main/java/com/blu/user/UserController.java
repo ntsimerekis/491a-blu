@@ -1,11 +1,15 @@
 package com.blu.user;
 
 import com.blu.device.Device;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -14,6 +18,10 @@ import java.util.List;
 @RequestMapping("/users")
 @RestController
 public class UserController {
+
+    @Autowired
+    ObjectMapper mapper;
+
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -30,8 +38,20 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> allUsers() {
-        return userService.allUsers();
+    public List<ObjectNode> allUsers() {
+        final List<ObjectNode> users = new ArrayList<ObjectNode>();
+        userService.allUsers().forEach(user -> {
+            ObjectNode userNode = mapper.createObjectNode();
+            userNode.put("fullName", user.getFullName());
+            userNode.put("email", user.getUsername());
+            userNode.put("emailVerified", user.isEmailVerified());
+            userNode.put("enabled", user.isEnabled());
+            userNode.put("authorities", user.getAuthorities().toString());
+            userNode.put("accountNonExpired", user.isAccountNonExpired());
+            users.add(userNode);
+        });
+
+        return users;
     }
 
     @PostMapping

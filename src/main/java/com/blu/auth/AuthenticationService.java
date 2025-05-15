@@ -150,16 +150,12 @@ public class AuthenticationService {
 
         return emailService.send(
                 fromEmail,
-
                 email,
 
                 "Blu Password Reset",
-
                 """
                         Hello, let's reset your password!
-                        Click on this link to reset your password.
-                        https://localhost:8080/confirmForgotPassword/
-                        """ + token.getConfirmationToken()
+                       <a href=http://localhost:5173/#/replacePassword?token=""" + token.getConfirmationToken() + ">Click on this link to reset your password.\n</a>"
         );
     }
 
