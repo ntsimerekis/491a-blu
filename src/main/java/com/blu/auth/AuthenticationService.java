@@ -192,4 +192,13 @@ public class AuthenticationService {
         }
         return emailHTML;
     }
+
+    public void makeAdmin(String email, boolean admin){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(email));
+
+        user.setAdmin(admin);
+
+        userRepository.save(user);
+    }
 }

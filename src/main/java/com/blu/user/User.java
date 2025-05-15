@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
@@ -60,6 +61,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (admin){
+            return Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
         return List.of();
     }
 
@@ -110,6 +114,10 @@ public class User implements UserDetails {
     public User verifyUser(){
         this.emailVerified = true;
         return this;
+    }
+
+    public void setAdmin(boolean admin) {
+            this.admin = admin;
     }
 
     public boolean isEmailVerified() {

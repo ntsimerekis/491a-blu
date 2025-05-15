@@ -60,4 +60,10 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(loginResponse);
     }
+
+    @PostMapping("/grantadmin/{email}/{isAdmin}")
+    public ResponseEntity<Boolean> grantAdmin(@PathVariable String email, @PathVariable boolean isAdmin) {
+        authenticationService.makeAdmin(email, isAdmin);
+        return ResponseEntity.ok(true);
+    }
 }
